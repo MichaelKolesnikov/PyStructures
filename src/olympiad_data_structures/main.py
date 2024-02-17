@@ -1,11 +1,11 @@
-import NumberTheory
+from src.olympiad_data_structures import number_theory
 import time
 from functools import reduce
 
 
 def main():
     n = 10**7
-    sieve = NumberTheory.EratosthenesSieve()
+    sieve = number_theory.EratosthenesSieve()
     t1 = time.time()
     sieve.build(n)
     t2 = time.time()
@@ -14,7 +14,7 @@ def main():
     print(sieve.is_prime(k), sieve.is_prime_sqrt_method(k))
 
     n = 10**5
-    factorizer = NumberTheory.Factorizer()
+    factorizer = number_theory.Factorizer()
     factorizer.build(n)
     k = int(input())
     factorization = factorizer.factorize(k)

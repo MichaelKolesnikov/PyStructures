@@ -1,4 +1,4 @@
-from .EratosthenesSieve import EratosthenesSieve
+from .Eratosthenes_sieve import EratosthenesSieve
 
 
 class Factorizer:

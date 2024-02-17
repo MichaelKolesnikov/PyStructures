@@ -1,7 +1,7 @@
 import unittest
 from random import randint
 from functools import reduce
-from NumberTheory import EratosthenesSieve, Factorizer
+from src.olympiad_data_structures.number_theory import EratosthenesSieve, Factorizer
 
 
 class TestEratosthenesSieve(unittest.TestCase):
