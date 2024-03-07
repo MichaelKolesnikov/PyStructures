@@ -2,6 +2,58 @@ import unittest
 from random import randint
 from functools import reduce
 from src.olympiad_data_structures.number_theory import EratosthenesSieve, Factorizer, gcd_lcm
+from src.olympiad_data_structures.PointVector import PointVector
+
+
+class TestPointVector(unittest.TestCase):
+
+    def test_initialization(self):
+        v = PointVector(1, 2, 3)
+        self.assertEqual(len(v), 3)
+        self.assertEqual(v.coordinates, [1, 2, 3])
+
+    def test_addition(self):
+        v1 = PointVector(1, 2, 3)
+        v2 = PointVector(4, 5, 6)
+        result = v1 + v2
+        self.assertEqual(result.coordinates, [5, 7, 9])
+
+    def test_subtraction(self):
+        v1 = PointVector(1, 2, 3)
+        v2 = PointVector(4, 5, 6)
+        result = v2 - v1
+        self.assertEqual(result.coordinates, [3, 3, 3])
+
+    def test_scalar_multiplication(self):
+        v = PointVector(1, 2, 3)
+        result = v * 2
+        self.assertEqual(result.coordinates, [2, 4, 6])
+
+    def test_scalar_division(self):
+        v = PointVector(2, 4, 6)
+        result = v / 2
+        self.assertEqual(result.coordinates, [1, 2, 3])
+
+    def test_magnitude(self):
+        v = PointVector(3, 4)
+        self.assertEqual(v.magnitude(), 5)
+
+    def test_normalize(self):
+        v = PointVector(3, 4)
+        normalized = v.normalize()
+        self.assertAlmostEqual(normalized.magnitude(), 1.0)
+
+    def test_dot_product(self):
+        v1 = PointVector(1, 2, 3)
+        v2 = PointVector(4, 5, 6)
+        result = v1.dot_product(v2)
+        self.assertEqual(result, 32)
+
+    def test_cross_product(self):
+        v1 = PointVector(1, 0, 0)
+        v2 = PointVector(0, 1, 0)
+        result = v1.cross_product(v2)
+        self.assertEqual(result.coordinates, [0, 0, 1])
 
 
 class TestEratosthenesSieve(unittest.TestCase):
