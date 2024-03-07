@@ -7,8 +7,13 @@ class FloorLog:
 
     @staticmethod
     def initialize_to_or_clear_after(n: int) -> None:
-        FloorLog.floor_log = [0] * (n + 1)
+        if n <= FloorLog.maximum_computed_logarithm:
+            del FloorLog.floor_log[n + 1:]
+            FloorLog.maximum_computed_logarithm = n
+            return None
+
         if FloorLog.maximum_computed_logarithm < n:
+            FloorLog.floor_log += [0] * (n - FloorLog.maximum_computed_logarithm)
             for i in range(FloorLog.maximum_computed_logarithm + 1, n + 1):
                 FloorLog.floor_log[i] = FloorLog.floor_log[i // 2] + 1
             FloorLog.maximum_computed_logarithm = n

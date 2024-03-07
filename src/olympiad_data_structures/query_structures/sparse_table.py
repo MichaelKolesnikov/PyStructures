@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import TypeVar, List, Callable
+from ..number_theory import floor_log
 
 T = TypeVar('T')
 
@@ -10,7 +11,7 @@ class ISparseTable[T](ABC):
     def __init__(self, v: List[T], func: BinaryFunction[T]) -> None:
         self._n = len(v)
         self._size = self._n
-        self._log = self._floor_log(self._n) + 1
+        self._log = floor_log.FloorLog.get_floor_log(self._n) + 1
         self._a = v[:]
         self._f = func
         self.initialize()
@@ -18,14 +19,6 @@ class ISparseTable[T](ABC):
     @abstractmethod
     def initialize(self) -> None:
         pass
-
-    @staticmethod
-    def _floor_log(x: int) -> int:
-        res = 0
-        while x > 1:
-            x >>= 1
-            res += 1
-        return res
 
     @property
     def size(self) -> int:
@@ -59,7 +52,7 @@ class SparseTableWithIdempotency[T](ISparseTable):
 
     def ask_index(self, left: int, right: int) -> int:
         length = right - left + 1
-        level = self._floor_log(length)
+        level = floor_log.FloorLog.get_floor_log(length)
         left = self._sparse[level][left]
         right = self._sparse[level][right - (1 << level) + 1]
         return self._get_index(left, right)
