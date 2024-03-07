@@ -2,6 +2,7 @@ import unittest
 from random import randint
 from functools import reduce
 from src.olympiad_data_structures.number_theory import EratosthenesSieve, Factorizer, gcd_lcm
+from src.olympiad_data_structures.query_structures import sparse_table as st
 from src.olympiad_data_structures.PointVector import PointVector
 
 
@@ -60,8 +61,8 @@ class TestEratosthenesSieve(unittest.TestCase):
     def test_prime(self) -> None:
         size = 10**7
         test_size = 10**2
-        sieve = EratosthenesSieve()
-        sieve.build(size)
+        sieve = EratosthenesSieve(size)
+        sieve.build()
         test_numbers = [randint(1, size - 1) for _ in range(test_size)]
         for test_number in test_numbers:
             self.assertEqual(sieve.is_prime(test_number), sieve.is_prime_sqrt_method(test_number))
@@ -76,6 +77,58 @@ class TestFactorizer(unittest.TestCase):
         test_numbers = [randint(1, size - 1) for _ in range(test_size)]
         for test_number in test_numbers:
             self.assertEqual(reduce(lambda x, y: x * y, factorizer.factorize(test_number), 1), test_number)
+
+
+class SparseTableTest(unittest.TestCase):
+    def test_min_function(self):
+        v = [1, 3, 2, 5, 4]
+        sparse_table = st.SparseTableWithIdempotency(v, min)
+
+        self.assertEqual(sparse_table.ask_value(1, 3), 2)
+        self.assertEqual(sparse_table.ask_value(0, 4), 1)
+        self.assertEqual(sparse_table.ask_value(2, 4), 2)
+
+    def test_max_function(self):
+        v = [1, 3, 2, 5, 4]
+        sparse_table = st.SparseTableWithIdempotency(v, max)
+
+        self.assertEqual(sparse_table.ask_value(1, 3), 5)
+        self.assertEqual(sparse_table.ask_value(0, 4), 5)
+        self.assertEqual(sparse_table.ask_value(2, 4), 5)
+
+    def test_sum_function(self):
+        v = [1, 3, 2, 5, 4]
+        sparse_table = st.SparseTable(v, lambda a, b: a + b)
+
+        self.assertEqual(sparse_table.ask_value(1, 3), 10)
+        self.assertEqual(sparse_table.ask_value(0, 4), 15)
+        self.assertEqual(sparse_table.ask_value(2, 4), 11)
+
+    def test_mul_function(self):
+        v = [1, 3, 2, 5, 4]
+        sparse_table = st.SparseTable(v, lambda a, b: a * b)
+
+        self.assertEqual(sparse_table.ask_value(1, 3), 30)
+        self.assertEqual(sparse_table.ask_value(0, 4), 120)
+        self.assertEqual(sparse_table.ask_value(2, 4), 40)
+
+
+class SparseTableWithIdempotencyTest(unittest.TestCase):
+    def test_gcd_function(self):
+        v = [12, 18, 24, 36, 48]
+        sparse_table = st.SparseTable(v, lambda a, b: gcd_lcm.get_greatest_common_divisor(a, b))
+
+        self.assertEqual(sparse_table.ask_value(1, 3), 6)
+        self.assertEqual(sparse_table.ask_value(0, 4), 6)
+        self.assertEqual(sparse_table.ask_value(2, 4), 12)
+
+    def test_lcm_function(self):
+        v = [12, 18, 24, 36, 48]
+        sparse_table = st.SparseTable(v, lambda a, b: gcd_lcm.lcm(a, b))
+
+        self.assertEqual(sparse_table.ask_value(1, 3), 72)
+        self.assertEqual(sparse_table.ask_value(0, 4), 144)
+        self.assertEqual(sparse_table.ask_value(2, 4), 144)
 
 
 class TestMathFunctions(unittest.TestCase):

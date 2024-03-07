@@ -4,10 +4,10 @@ from functools import reduce
 
 
 def main():
-    n = 10**7
-    sieve = number_theory.EratosthenesSieve()
+    n = 10**6
+    sieve = number_theory.EratosthenesSieve(n)
     t1 = time.time()
-    sieve.build(n)
+    sieve.build()
     t2 = time.time()
     print(t2 - t1)
     k = int(input())

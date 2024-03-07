@@ -83,3 +83,13 @@ class PointVector:
         y = self.coordinates[2] * other.coordinates[0] - self.coordinates[0] * other.coordinates[2]
         z = self.coordinates[0] * other.coordinates[1] - self.coordinates[1] * other.coordinates[0]
         return PointVector(x, y, z)
+
+
+def get_max_point(point1: PointVector, point2: PointVector) -> PointVector:
+    coordinates = [max(i, j) for i, j in zip(point1.coordinates, point2.coordinates)]
+    return PointVector(*coordinates)
+
+
+def get_min_point(point1: PointVector, point2: PointVector) -> PointVector:
+    coordinates = [min(i, j) for i, j in zip(point1.coordinates, point2.coordinates)]
+    return PointVector(*coordinates)
