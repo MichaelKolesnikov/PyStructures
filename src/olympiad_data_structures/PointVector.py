@@ -27,8 +27,10 @@ class PointVector:
             raise ValueError("Dimensions of vectors do not match")
         return PointVector(*(x - y for x, y in zip(self.coordinates, other.coordinates)))
 
-    def __mul__(self, scalar: float | int) -> "PointVector":
-        return PointVector(*(x * scalar for x in self.coordinates))
+    def __mul__(self, factor: float | int | "PointVector") -> "PointVector" | float | int:
+        if isinstance(factor, float) or isinstance(factor, int):
+            return PointVector(*(x * factor for x in self.coordinates))
+        return sum([i * j for i, j in zip(self.coordinates, factor.coordinates)])
 
     def __rmul__(self, scalar: float | int) -> "PointVector":
         return self.__mul__(scalar)
@@ -83,6 +85,9 @@ class PointVector:
         y = self.coordinates[2] * other.coordinates[0] - self.coordinates[0] * other.coordinates[2]
         z = self.coordinates[0] * other.coordinates[1] - self.coordinates[1] * other.coordinates[0]
         return PointVector(x, y, z)
+
+    def distance(self, other: "PointVector") -> float | int:
+        return (self - other).magnitude()
 
 
 def get_max_point(point1: PointVector, point2: PointVector) -> PointVector:
