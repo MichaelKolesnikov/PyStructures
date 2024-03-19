@@ -1,4 +1,5 @@
 from src.olympiad_data_structures import number_theory
+from src.olympiad_data_structures import PointVector
 import time
 from functools import reduce
 

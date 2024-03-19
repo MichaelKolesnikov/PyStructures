@@ -1,4 +1,5 @@
 import math
+from typing import Union
 
 
 class PointVector:
@@ -27,7 +28,7 @@ class PointVector:
             raise ValueError("Dimensions of vectors do not match")
         return PointVector(*(x - y for x, y in zip(self.coordinates, other.coordinates)))
 
-    def __mul__(self, factor: float | int | "PointVector") -> "PointVector" | float | int:
+    def __mul__(self, factor: Union[float, int, "PointVector"]) -> Union[float, int, "PointVector"]:
         if isinstance(factor, float) or isinstance(factor, int):
             return PointVector(*(x * factor for x in self.coordinates))
         return sum([i * j for i, j in zip(self.coordinates, factor.coordinates)])
@@ -66,6 +67,9 @@ class PointVector:
             return self.__dict__["coordinates"]
         raise AttributeError(f"Point has no attribute '{name}'")
 
+    def __hash__(self) -> int:
+        return hash(tuple(self.coordinates))
+
     def magnitude(self) -> float:
         return math.sqrt(sum(x ** 2 for x in self.coordinates))
 
@@ -88,6 +92,14 @@ class PointVector:
 
     def distance(self, other: "PointVector") -> float | int:
         return (self - other).magnitude()
+
+    def get_rotated(self, angle: float) -> "PointVector":
+        assert len(self.coordinates) > 1
+        x = self.coordinates[0]
+        y = self.coordinates[1]
+        cos_ = math.cos(angle)
+        sin_ = math.sin(angle)
+        return PointVector(x * cos_ - y * sin_, x * sin_ + y + cos_)
 
 
 def get_max_point(point1: PointVector, point2: PointVector) -> PointVector:
