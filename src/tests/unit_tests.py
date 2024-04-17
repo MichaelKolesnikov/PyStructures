@@ -1,9 +1,73 @@
+import random
 import unittest
 from random import randint
 from functools import reduce
 from src.olympiad_data_structures.number_theory import EratosthenesSieve, Factorizer, gcd_lcm
 from src.olympiad_data_structures.query_structures import sparse_table as st
 from src.olympiad_data_structures.PointVector import PointVector
+from src.olympiad_data_structures.search import BinarySearcher
+from src.olympiad_data_structures.search import InterpolationSearcher
+from typing import Callable
+
+
+class TestBinarySearcher(unittest.TestCase):
+    def test_first_true(self):
+        for index in [randint(-100, 100) for _ in range(100)]:
+            f: Callable[[int], bool] = lambda i: i >= index
+            result = BinarySearcher.first_true(-101, 101, f)
+            self.assertEqual(result, index)
+        index = 105
+        f: Callable[[int], bool] = lambda i: i >= index
+        result = BinarySearcher.first_true(-101, 101, f)
+        self.assertEqual(result, 101)
+
+    def test_last_true(self):
+        for index in [randint(-100, 100) for _ in range(100)]:
+            f: Callable[[int], bool] = lambda i: i <= index
+            result = BinarySearcher.last_true(-101, 101, f)
+            self.assertEqual(result, index)
+        index = -105
+        f: Callable[[int], bool] = lambda i: i <= index
+        result = BinarySearcher.last_true(-101, 101, f)
+        self.assertEqual(result, -101)
+
+    def test_non_decreasing_function(self):
+        delta = 0.001
+        for rand_real_number in [random.uniform(0, 90) for _ in range(50)]:
+            def f(x):
+                return x**3 >= rand_real_number
+
+            result = BinarySearcher.real_search(-10, 10, f, eps=delta, non_decreasing=True)
+            self.assertTrue(abs(rand_real_number**(1/3) - result) < delta)
+
+    def test_non_increasing_function(self):
+        delta = 0.001
+        for rand_real_number in [random.uniform(0, 90) for _ in range(50)]:
+            def f(x):
+                return -x ** 3 >= rand_real_number
+
+            result = BinarySearcher.real_search(-10, 10, f, eps=delta, non_decreasing=False)
+            self.assertTrue(abs(-(rand_real_number ** (1 / 3)) - result) < delta)
+
+
+class TestInterpolationSearcher(unittest.TestCase):
+    def test_non_decreasing_sequence(self):
+        sequence = [1, 3, 5, 7, 9, 11, 13, 15]
+        key = 7
+        result = InterpolationSearcher.interpolation_search(sequence, key)
+        self.assertEqual(result, 3)
+
+    def test_non_increasing_sequence(self):
+        sequence = [15, 13, 11, 9, 7, 5, 3, 1]
+        key = 7
+        result = InterpolationSearcher.interpolation_search(sequence, key, non_decreasing=False)
+        self.assertEqual(result, 4)
+
+    def test_key_not_found(self):
+        sequence = [2, 4, 6, 8, 10]
+        key = 5
+        result = InterpolationSearcher.interpolation_search(sequence, key)
+        self.assertEqual(result, -1)
 
 
 class TestPointVector(unittest.TestCase):

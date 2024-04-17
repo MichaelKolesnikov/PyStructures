@@ -70,6 +70,9 @@ class PointVector:
     def __hash__(self) -> int:
         return hash(tuple(self.coordinates))
 
+    def __neg__(self):
+        return PointVector(*(-x for x in self.coordinates))
+
     def magnitude(self) -> float:
         return math.sqrt(sum(x ** 2 for x in self.coordinates))
 

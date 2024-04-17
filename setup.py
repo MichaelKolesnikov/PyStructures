@@ -4,7 +4,7 @@ install_requires = ["bitarray"]
 
 setup(
     name="olympiad_data_structures",
-    version="0.0.10",
+    version="0.0.11",
     install_requires=install_requires,
     use_scm_version=True,
     packages=find_packages(where="src"),
