@@ -21,5 +21,5 @@ def convert_number_system(number_in_from_base: str, from_base: int, to_base: int
         answer = to_alphabet[number_in_10_base % to_base] + answer
         number_in_10_base //= to_base
     if not answer:
-        answer = '0'
+        answer = to_alphabet[0]
     return answer

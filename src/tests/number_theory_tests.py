@@ -30,7 +30,7 @@ class TestConvertNumberSystem(unittest.TestCase):
         self.assertEqual(convert_number_system(number_in_from_base, 2, 10), str(right_answer))
 
     def test_zero(self):
-        self.assertEqual(convert_number_system("0", 10, 2), "0")
+        self.assertEqual(convert_number_system("0", 10, 2, 'ab'), "a")
 
     def test_ege1(self):
         task_alphabet = "АКРУ"
